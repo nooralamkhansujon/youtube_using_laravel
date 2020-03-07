@@ -1,0 +1,34 @@
+
+.tab-border{
+    border-bottom:4px solid rgb(216, 18, 18);
+    position:absolute;
+}
+
+ul.tab-group{
+    display:flex;
+    justify-content:space-around;
+    list-style:none;
+    background-color:#fff;
+}
+
+ul.tab-group li{
+   padding     : 5px;
+   line-height : 50px;
+   border-right: 0.5px solid rgb(110, 102, 102,0.9);
+   position    : relative;
+}
+
+ul.tab-group li a{
+    text-decoration: none !important;
+    font-size:24px;
+    color:rgb(82, 79, 79);
+    padding:0px 10px;
+}
+
+.tab-section{
+    display:none;
+}
+
+.show{
+    display:block;
+}
