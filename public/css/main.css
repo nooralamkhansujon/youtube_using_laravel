@@ -2,6 +2,7 @@
 .tab-border{
     border-bottom:4px solid rgb(216, 18, 18);
     position:absolute;
+    transition:all .5s ease;
 }
 
 ul.tab-group{
@@ -18,6 +19,10 @@ ul.tab-group li{
    position    : relative;
 }
 
+ul.tab-group li:last-child{
+    border-right:none;
+}
+
 ul.tab-group li a{
     text-decoration: none !important;
     font-size:24px;
@@ -28,7 +33,21 @@ ul.tab-group li a{
 .tab-section{
     display:none;
 }
-
+.channel{
+    display:none;
+    transition:all 1s ease;
+}
 .show{
     display:block;
+    transition:all .5s ease;
+}
+
+
+.img-box{
+    position: relative !important;
+}
+.upload-image{
+    position: absolute !important;
+    top:0;
+    right:15px;
 }
