@@ -13,23 +13,14 @@
             <ul class="navbar-nav mr-auto">
                 @auth
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Home</a>
+                         <a href="{{route('home.index')}}" class="nav-link text-danger">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#"  class="nav-link">Profile</a>
+                          <a href="{{route('profile.profile')}}"  class="nav-link text-danger">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Channel</a>
+                        <a href="{{route('profile.about')}}" class="nav-link text-danger">About</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link" data-toggle="dropdown">
-                            <img width="30px" style="font-weight:bold;" src="{{asset('svg/menu.svg')}}" alt="">
-                        </a>
-                        <div class="dropdown-menu text-secondary" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item " href="#">videos</a>
-                                <a href="#" class="dropdown-item">Like Videos</a>
-                        </div>
-                  </li>
                @endauth
 
             </ul>
@@ -39,21 +30,45 @@
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="nav-link text-danger" href="{{ route('login') }}">{{ __('Login') }}</a>
                     </li>
                     @if (Route::has('register'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">Register</a>
+                            <a class="nav-link text-danger" href="{{ route('register') }}">Register</a>
                         </li>
                     @endif
                 @else
+
+                        <li class="nav-item dropdown">
+                            <div class="notification-box">
+                            <a  href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="text-secondary mt-2" style="font-size:20px;">
+                                        <i class="fa fa-bell"></i>
+                                    </span>
+                                    <span class="total_notification text-danger">23</span>
+                                </a>
+                                <div class="dropdown-menu bg-success text-light" aria-labelledby="dropdownMenuLink">
+                                    <a href="#" class="dropdown-item text-light">
+                                        Notification One Notification One
+                                    </a>
+                                    <a href="#" class="dropdown-item text-light">
+                                        Notification One Notification One
+                                    </a>
+                                    <a href="#" class="dropdown-item text-light">
+                                        Notification One Notification One
+                                    </a>
+
+                                </div>
+                            </div>
+                        </li>
+
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle text-danger" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
@@ -64,6 +79,7 @@
                             </form>
                         </div>
                     </li>
+
                 @endguest
             </ul>
         </div>
