@@ -15,6 +15,8 @@ class CreateViewsTable extends Migration
     {
         Schema::create('views', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('video_id');
+            $table->unsignedInteger('from_id');
             $table->timestamps();
         });
     }
