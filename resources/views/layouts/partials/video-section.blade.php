@@ -99,7 +99,9 @@
              <div class="card-body">
                  <div class="row">
                      <div class="col-md-12">
-                         <a href="#"><video width="100%"  controls src="{{asset('video/Singleton Design Pattern.mp4')}}"></video></a>
+                         <a href="#">
+                             <video width="100%"  controls src="{{asset('video/Singleton Design Pattern.mp4')}}"></video>
+                         </a>
                      </div>
                      <div class="col-md-12">
                          <div class="row">
