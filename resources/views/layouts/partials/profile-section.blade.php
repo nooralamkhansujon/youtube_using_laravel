@@ -53,6 +53,7 @@
 </div>
 {{-- end of profile  --}}
 
+
 {{-- start of channel  --}}
     <div class="card mb-3 mt-3">
         <div class="d-flex justify-content-between">
@@ -61,18 +62,16 @@
         </div>
 
         <div class="card-body channel" id="channel_body">
-            @if(session()->has('msg'))
-                <div class="alert alert-{{session()->get('type')}}">
-                    {{ session()->get('msg') }}
-               </div>
-            @endif
-        <form action="{{route('channel.create')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('channel.create')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="col-md-12 form-group">
-                    <label for="name" class="form-control-label text-danger" style="font-size:20px;text-transform:capitalize">
+                    <label for="name" class="form-control-label text-danger"
+                        style="font-size:20px;text-transform:capitalize">
                         Channel Name
                     </label>
                     <input type="text" name="name" placeholder="Enter Channel Name" class="form-control" id="name">
+                    <input type="hidden" name="slug" id="slugInput" value="{{old('slug')}}"  >
+                    <p class="text-secondary">{{env('APP_URL')}} <span id="slug"></span></p>
                 </div>
                 <div class="col-md-12 form-group">
                     <label for="description" class="form-control-label text-danger"
@@ -97,3 +96,39 @@
 {{-- end of channel section  --}}
 
 
+
+@section('scripts')
+
+<script>
+    $(document).ready(function(){
+        function createChannel()
+       {
+            let create_channel_button = document.getElementById('create_channel');
+            let create_channel = document.getElementById('channel_body');
+            create_channel_button.addEventListener('click',function(){
+                    create_channel.classList.toggle('show');
+            });
+        }
+        createChannel();
+
+        function slugify(text)
+        {
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '-')           // Replace spaces with -
+                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                .replace(/^-+/, '')             // Trim - from start of text
+                .replace(/-+$/, '');            // Trim - from end of text
+        }
+        const channel_name   = document.getElementById('name');
+        const channel_slug   = document.getElementById('slug');
+        const slug_input     = document.getElementById('slugInput');
+        channel_name.addEventListener('keyup',function(event){
+                channel_slug.innerHTML = slugify(this.value);
+                slug_input.value       = slugify(this.value);
+        });
+    });
+
+</script>
+
+@endsection
