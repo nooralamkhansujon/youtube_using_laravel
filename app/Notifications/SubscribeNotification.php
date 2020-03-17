@@ -33,29 +33,15 @@ class SubscribeNotification extends Notification
         return ['database'];
     }
 
-    // /**
-    //  * Get the mail representation of the notification.
-    //  *
-    //  * @param  mixed  $notifiable
-    //  * @return \Illuminate\Notifications\Messages\MailMessage
-    //  */
-    // public function toMail($notifiable)
-    // {
-    //     return (new MailMessage)
-    //                 ->line('The introduction to .')
-    //                 ->action('Notification Action', url('/'))
-    //                 ->line('Thank you for using our application!');
-    // }
-
     public function toDatabase($notifiable)
     {
-        if($this->user == $notifiable->name)
+        if($this->user->name == $notifiable->name)
         {
             $message = "<strong>You</strong> subscribe on your Channel";
         }
         else{
 
-            $message = "<strong>".$this->user->name."</strong> subscribe on your Channel";
+            $message = $this->user->name." subscribe on your Channel";
         }
         return [
             'message' => $message
