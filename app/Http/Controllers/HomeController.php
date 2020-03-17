@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Profile;
 use App\Image;
 use App\Channel;
+use App\Video;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -20,7 +22,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('home');
+        $videos          = Video::all();
+        return view('home',compact('videos','subscribevideo'));
     }
     public function details()
     {
@@ -28,7 +31,9 @@ class HomeController extends Controller
     }
     public function home()
     {
-        return view('layouts.profile.video');
+        $videos          = User::find(auth()->user()->id)->videos()->orderBy('id','desc')->get();
+        $subscribevideo  = User::find(auth()->user()->id)->subscribeVideo();
+        return view('layouts.profile.video',compact('videos','subscribevideo'));
     }
 
     public function profile()
@@ -39,7 +44,8 @@ class HomeController extends Controller
 
     public function channel()
     {
-        return view('layouts.profile.channel');
+        $channels = Channel::where('user_id',auth()->user()->id)->get();
+        return view('layouts.profile.channel',compact('channels'));
     }
 
     public function about()
@@ -63,13 +69,13 @@ class HomeController extends Controller
 
         //update profile
         $profile           = Profile::where('user_id',auth()->user()->id)->get()[0];
-        $profile->fullname = $request->fullname;
-        $profile->location = $request->location;
+        $profile->fullname = $request->fullname; // save profile fullname
+        $profile->location = $request->location; // save profile location
         $profile->save();
 
-        $user        = auth()->user();
-        $user->email = $request->email;
-        $user->save();
+        $user        = User::find(auth()->user()->id); // find auth user object
+        $user->email = $request->email; // update $user email
+        $user->save(); // then save user in database
 
         if($request->hasFile('image'))
         {
@@ -81,8 +87,8 @@ class HomeController extends Controller
                 {
                     unlink(public_path('storage/'.$profile->image->url));
                 }
-                $image                 = $profile->image;
-                $image->url            = $this->thumbnail($request->file('image'),'profile','profile',200,200);
+                $image            = $profile->image;
+                $image->url       = $this->thumbnail($request->file('image'),'profile','profile',200,200);//this function return image path
                 $image->save();
             }
             //else not exist then create new Image
@@ -93,9 +99,7 @@ class HomeController extends Controller
                 $image->url            = $this->thumbnail($request->image,'profile','profile',200,200);
                 $image->save();
             }
-
         }
-
         $this->setSuccess('Your profile has been updated');
         return back();
     }
@@ -116,30 +120,34 @@ class HomeController extends Controller
         }
 
         //create channel
-        $channel    = Channel::create([
+        $channel  = Channel::create([
                              'name'        => $request->name,
                              'description' => $request->description,
-                             'user_id'     => auth()->user()->id
-                        ]);
+                             'user_id'     => auth()->user()->id,
+                             'slug'        => $request->slug
+                    ]);
 
         if($channel)
         {
-            $image                 = new Image();
-            $image->imageable_id   = $channel->id;
-            $image->imageable_type = "App\Channel";
-            $image->url            = $this->thumbnail($request->image,'Channel','Channel',200,200);
-            $image->save();
-
-            session()->flash('msg','Your Channel is created!');
-            session()->flash('type','success');
+            $image                 = new Image(); //create new image object
+            $image->imageable_id   = $channel->id;  //then save channel id as imageable_id
+            $image->imageable_type = "App\Channel";  // then save channelType in imageable_type
+            $image->url            = $this->thumbnail($request->image,'Channel','Channel',200,200); // this function return image path
+            $image->save(); // save image object in database
+            $this->setSuccess('New Channel has been created');  //
             return back();
         }
 
-
-
-
-
+        $this->setError('Error! Something is Wrong');
+        return back();
     }
+
+    public function channels()
+    {
+        $channels = Channel::all();
+        return view('layouts.profile.channel',compact('channels'));
+    }
+
 
 
 }
